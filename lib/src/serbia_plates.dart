@@ -7,6 +7,7 @@ import 'package:plate_core/plate_core.dart';
 import 'serbia_colors.dart';
 import 'serbia_country.dart';
 import 'serbia_missions.dart';
+import 'serbia_regions.dart';
 
 /// Where the ink sits, in plate units.
 ///
@@ -434,6 +435,7 @@ PlateSpec _oneLine({
         PlateDecal(image: _crest, box: crest),
     ],
     textGroups: textGroups,
+    resolveRegion: SerbiaRegions.captionOf,
     restrictions: restrictions,
   );
 }
@@ -601,6 +603,7 @@ PlateSpec _twoRows({
         ),
       ),
     ],
+    resolveRegion: SerbiaRegions.captionOf,
     textGroups: <PlateTextGroup>[
       const PlateTextGroup(<int>[0], key: 'region'),
       PlateTextGroup(<int>[for (int i = 0; i < aSlots; i++) 1 + i], key: 'a'),

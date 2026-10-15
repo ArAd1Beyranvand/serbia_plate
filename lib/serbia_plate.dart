@@ -8,5 +8,6 @@ export 'src/serbia_country.dart';
 export 'src/serbia_missions.dart';
 export 'src/serbia_themes.dart';
 export 'src/serbia_plates.dart';
+export 'src/serbia_regions.dart';
 export 'src/serbia_validators.dart';
 export 'package:plate_alphabet/plate_alphabet.dart' show SerbiaAlphabets;
