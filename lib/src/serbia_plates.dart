@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/painting.dart' show AssetImage;
 import 'package:plate_alphabet/plate_alphabet.dart';
 import 'package:plate_core/plate_core.dart';
@@ -40,7 +42,7 @@ abstract final class _Layout {
   static const double crestTop = 30.5, crestHeight = 41.5;
   static const double crestWidth = 31.2;
   static const double echoTop = 70.5, echoHeight = 30, echoGlyph = 30;
-  static const double echoDx = 8.5, echoWidth = 16;
+  static const double echoSpan = 34;
   static const double dotGlyph = 50, sepWidth = 30;
 
   static const double dipTop = 10, dipHeight = 90;
@@ -86,7 +88,11 @@ abstract final class _Layout {
 
   static const _Group dipCode = _Group('code', <double>[145, 193], 46);
   static const _Group dipLetter = _Group('letter', <double>[262.8], 46);
-  static const _Group dipSerial = _Group('serial', <double>[327, 372.5, 418], 46);
+  static const _Group dipSerial = _Group('serial', <double>[
+    327,
+    372.5,
+    418,
+  ], 46);
 
   static const _Group militaryLetter = _Group('letter', <double>[168], 60);
   static const _Group militaryDigits = _Group('digits', <double>[
@@ -104,7 +110,7 @@ abstract final class _Layout {
   static const double bottomRowTop = 108, bottomRowHeight = 82;
   static const double rowsCrestLeft = 224.2, rowsCrestTop = 24.8;
   static const double rowsCrestWidth = 28.8, rowsCrestHeight = 38.9;
-  static const double rowsEchoTop = 62.5, rowsEchoDx = 8;
+  static const double rowsEchoTop = 62.5, rowsEchoSpan = 32;
   static const double rowsSloLeft = 3, rowsSloTop = 60, rowsSloWidth = 36;
   static const double rowsSloHeight = 32, rowsSloGlyph = 24;
   static const double rowsDashGlyph = 70, rowsDashCx = 130;
@@ -143,9 +149,12 @@ const AssetImage _crest = AssetImage(
 ///
 /// Not implemented: the pre-2011 plate (superseded, not current), the
 /// geographical map, the oval `CMD`/`CD` extra plates (no reference), and the
-/// three-digit diplomatic country code, since the plate has a fixed slot
-/// count (two digits). The area-code echo in Cyrillic is a mirror of the
-/// region slots.
+/// three-digit diplomatic country code, since that field is fixed at two
+/// digits. The area-code echo in Cyrillic is a mirror of the region field.
+///
+/// A field is one slot: the area code, the number (three or four digits on
+/// [private]) and the series. The diplomatic plate's stacked area code and
+/// tail stay two slots each, because their characters are drawn apart.
 abstract final class SerbiaPlates {
   static final PlateSpec private = _oneLine(
     id: 'rs.private',
@@ -154,7 +163,11 @@ abstract final class SerbiaPlates {
         SerbiaAlphabets.regionLetters,
         SerbiaAlphabets.regionLetters,
       ]),
-      _Part(_Layout.privateDigits, _repeat(SerbiaAlphabets.digits, 4)),
+      _Part(
+        _Layout.privateDigits,
+        _repeat(SerbiaAlphabets.digits, 4),
+        minLength: 3,
+      ),
       _Part(_Layout.privateLetters, <PlateAlphabet>[
         SerbiaAlphabets.letters,
         SerbiaAlphabets.letters,
@@ -289,12 +302,16 @@ abstract final class SerbiaPlates {
       List<PlateAlphabet>.filled(n, a);
 }
 
-/// A [_Group] with the alphabet of each of its slots.
+/// A [_Group] with the alphabet of each of its cells. Neighbouring cells on
+/// the same alphabet are one field.
 class _Part {
-  const _Part(this.group, this.alphabets);
+  const _Part(this.group, this.alphabets, {this.minLength});
 
   final _Group group;
   final List<PlateAlphabet> alphabets;
+
+  /// The fewest characters of a variable run; null for a fixed one.
+  final int? minLength;
 }
 
 /// A two-slot group stacked upright at [cx] (the diplomatic plate's area code
@@ -336,21 +353,19 @@ PlateSpec _oneLine({
       ], key: key),
     );
     if (echo && key == 'region') {
-      for (int i = 0; i < made.length; i++) {
-        mirrors.add(
-          PlateMirror(
-            source: start + i,
-            box: _box(
-              crestCx + (i == 0 ? -_Layout.echoDx : _Layout.echoDx),
-              _Layout.echoWidth,
-              _Layout.echoTop,
-              _Layout.echoHeight,
-            ),
-            glyphHeight: _Layout.echoGlyph,
-            alphabet: SerbiaAlphabets.regionCyrillic,
+      mirrors.add(
+        PlateMirror(
+          source: start,
+          box: _box(
+            crestCx,
+            _Layout.echoSpan,
+            _Layout.echoTop,
+            _Layout.echoHeight,
           ),
-        );
-      }
+          glyphHeight: _Layout.echoGlyph,
+          alphabet: SerbiaAlphabets.regionCyrillic,
+        ),
+      );
     }
   }
 
@@ -359,13 +374,17 @@ PlateSpec _oneLine({
     addGroup(s.key, _stackSlots(s));
   }
   for (final _Part p in groups) {
-    addGroup(p.group.key, <PlateSlot>[
-      for (int i = 0; i < p.group.centres.length; i++)
-        PlateSlot(
-          alphabet: p.alphabets[i],
-          box: _box(p.group.centres[i], p.group.width, slotTop, slotHeight),
-        ),
-    ]);
+    addGroup(
+      p.group.key,
+      _fields(
+        p.alphabets,
+        p.group.centres,
+        p.group.width,
+        slotTop,
+        slotHeight,
+        minLength: p.minLength,
+      ),
+    );
   }
   for (final _Stack s in stacks.where((s) => s.key != 'region')) {
     addGroup(s.key, _stackSlots(s));
@@ -419,6 +438,47 @@ PlateSpec _oneLine({
   );
 }
 
+/// One slot per run of neighbouring cells on the same alphabet; the box
+/// spans the run at the cells' pitch and a fixed run is spaced to it.
+List<PlateSlot> _fields(
+  List<PlateAlphabet> alphabets,
+  List<double> centres,
+  double width,
+  double top,
+  double height, {
+  int? minLength,
+}) {
+  final double pitch = centres.length > 1
+      ? (centres.last - centres.first) / (centres.length - 1)
+      : 0;
+  final List<PlateSlot> slots = <PlateSlot>[];
+  for (int i = 0; i < alphabets.length;) {
+    int j = i + 1;
+    while (j < alphabets.length && alphabets[j] == alphabets[i]) {
+      j++;
+    }
+    final int count = j - i;
+    slots.add(
+      count == 1
+          ? PlateSlot(
+              alphabet: alphabets[i],
+              box: _box(centres[i], width, top, height),
+            )
+          : PlateSlot(
+              alphabet: alphabets[i],
+              box: PlateBox(centres[i] - pitch / 2, top, count * pitch, height),
+              length: count,
+              minLength: minLength,
+              spacing: minLength == null
+                  ? max(0, pitch - 0.6 * 0.72 * height)
+                  : 0,
+            ),
+    );
+    i = j;
+  }
+  return slots;
+}
+
 List<PlateSlot> _stackSlots(_Stack s) => <PlateSlot>[
   for (int i = 0; i < 2; i++)
     PlateSlot(
@@ -438,37 +498,34 @@ PlateSpec _twoRows({
   required List<PlateAlphabet> second,
   bool band = true,
 }) {
+  final List<PlateSlot> aFields = _fields(
+    first,
+    _Layout.rowsA.centres,
+    _Layout.rowsA.width,
+    _Layout.bottomRowTop,
+    _Layout.bottomRowHeight,
+  );
+  final List<PlateSlot> bFields = _fields(
+    second,
+    _Layout.rowsB.centres,
+    _Layout.rowsB.width,
+    _Layout.bottomRowTop,
+    _Layout.bottomRowHeight,
+  );
+  final int aSlots = aFields.length, bSlots = bFields.length;
   final List<PlateSlot> slots = <PlateSlot>[
-    for (int i = 0; i < 2; i++)
-      PlateSlot(
-        alphabet: SerbiaAlphabets.regionLetters,
-        box: _box(
-          _Layout.rowsRegion.centres[i],
-          _Layout.rowsRegion.width,
-          _Layout.topRowTop,
-          _Layout.topRowHeight,
-        ),
-      ),
-    for (int i = 0; i < first.length; i++)
-      PlateSlot(
-        alphabet: first[i],
-        box: _box(
-          _Layout.rowsA.centres[i],
-          _Layout.rowsA.width,
-          _Layout.bottomRowTop,
-          _Layout.bottomRowHeight,
-        ),
-      ),
-    for (int i = 0; i < second.length; i++)
-      PlateSlot(
-        alphabet: second[i],
-        box: _box(
-          _Layout.rowsB.centres[i],
-          _Layout.rowsB.width,
-          _Layout.bottomRowTop,
-          _Layout.bottomRowHeight,
-        ),
-      ),
+    ..._fields(
+      <PlateAlphabet>[
+        SerbiaAlphabets.regionLetters,
+        SerbiaAlphabets.regionLetters,
+      ],
+      _Layout.rowsRegion.centres,
+      _Layout.rowsRegion.width,
+      _Layout.topRowTop,
+      _Layout.topRowHeight,
+    ),
+    ...aFields,
+    ...bFields,
   ];
   const double crestCx = _Layout.rowsCrestLeft + _Layout.rowsCrestWidth / 2;
 
@@ -497,18 +554,17 @@ PlateSpec _twoRows({
     ]),
     slots: slots,
     mirrors: <PlateMirror>[
-      for (int i = 0; i < 2; i++)
-        PlateMirror(
-          source: i,
-          box: _box(
-            crestCx + (i == 0 ? -_Layout.rowsEchoDx : _Layout.rowsEchoDx),
-            _Layout.echoWidth,
-            _Layout.rowsEchoTop,
-            _Layout.echoHeight,
-          ),
-          glyphHeight: _Layout.echoGlyph,
-          alphabet: SerbiaAlphabets.regionCyrillic,
+      PlateMirror(
+        source: 0,
+        box: _box(
+          crestCx,
+          _Layout.rowsEchoSpan,
+          _Layout.rowsEchoTop,
+          _Layout.echoHeight,
         ),
+        glyphHeight: _Layout.echoGlyph,
+        alphabet: SerbiaAlphabets.regionCyrillic,
+      ),
     ],
     labels: <PlateLabel>[
       if (band)
@@ -546,12 +602,10 @@ PlateSpec _twoRows({
       ),
     ],
     textGroups: <PlateTextGroup>[
-      const PlateTextGroup(<int>[0, 1], key: 'region'),
+      const PlateTextGroup(<int>[0], key: 'region'),
+      PlateTextGroup(<int>[for (int i = 0; i < aSlots; i++) 1 + i], key: 'a'),
       PlateTextGroup(<int>[
-        for (int i = 0; i < first.length; i++) 2 + i,
-      ], key: 'a'),
-      PlateTextGroup(<int>[
-        for (int i = 0; i < second.length; i++) 2 + first.length + i,
+        for (int i = 0; i < bSlots; i++) 1 + aSlots + i,
       ], key: 'b'),
     ],
   );

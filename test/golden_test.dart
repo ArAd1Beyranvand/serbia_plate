@@ -23,32 +23,41 @@ void main() {
     await loader.load();
   });
 
-  /// category id -> (spec, theme, space-separated sample value)
-  final Map<String, (PlateSpec, PlateTheme, String)>
-  cases = <String, (PlateSpec, PlateTheme, String)>{
-    'private': (SerbiaPlates.private, SerbiaThemes.private, 'B G 1 2 3 4 E C'),
-    'taxi': (SerbiaPlates.taxi, SerbiaThemes.taxi, 'B G 1 2 3 4 5 T X'),
-    'trailer': (SerbiaPlates.trailer, SerbiaThemes.trailer, 'A B 0 1 2 N S'),
-    'police': (SerbiaPlates.police, SerbiaThemes.police, 'П 0 1 2 3 4 5'),
-    'diplomatic': (
-      SerbiaPlates.diplomatic,
-      SerbiaThemes.diplomatic,
-      'B G 0 1 A 2 3 4 2 5',
-    ),
-    'military': (SerbiaPlates.military, SerbiaThemes.military, 'T 2 1 3 9'),
-    'oldtimer': (SerbiaPlates.oldtimer, SerbiaThemes.oldtimer, 'B G O T 0 6 4'),
-    'agricultural': (
-      SerbiaPlates.agricultural,
-      SerbiaThemes.agricultural,
-      'B G 9 9 A A C',
-    ),
-    'moped': (SerbiaPlates.moped, SerbiaThemes.moped, 'B G 0 1 2 6 9'),
-    'motorcycle': (
-      SerbiaPlates.motorcycle,
-      SerbiaThemes.motorcycle,
-      'B G 0 1 2 6 9',
-    ),
-  };
+  /// category id -> (spec, theme, space-separated sample value, one per slot)
+  final Map<String, (PlateSpec, PlateTheme, String)> cases =
+      <String, (PlateSpec, PlateTheme, String)>{
+        'private': (SerbiaPlates.private, SerbiaThemes.private, 'BG 1234 EC'),
+        'private_three_digits': (
+          SerbiaPlates.private,
+          SerbiaThemes.private,
+          'NS 123 AB',
+        ),
+        'taxi': (SerbiaPlates.taxi, SerbiaThemes.taxi, 'BG 12345 T X'),
+        'trailer': (SerbiaPlates.trailer, SerbiaThemes.trailer, 'AB 012 NS'),
+        'police': (SerbiaPlates.police, SerbiaThemes.police, 'П 012 345'),
+        'diplomatic': (
+          SerbiaPlates.diplomatic,
+          SerbiaThemes.diplomatic,
+          'B G 01 A 234 2 5',
+        ),
+        'military': (SerbiaPlates.military, SerbiaThemes.military, 'T 2139'),
+        'oldtimer': (
+          SerbiaPlates.oldtimer,
+          SerbiaThemes.oldtimer,
+          'BG O T 064',
+        ),
+        'agricultural': (
+          SerbiaPlates.agricultural,
+          SerbiaThemes.agricultural,
+          'BG 99 AAC',
+        ),
+        'moped': (SerbiaPlates.moped, SerbiaThemes.moped, 'BG 01 269'),
+        'motorcycle': (
+          SerbiaPlates.motorcycle,
+          SerbiaThemes.motorcycle,
+          'BG 01 269',
+        ),
+      };
 
   for (final MapEntry<String, (PlateSpec, PlateTheme, String)> c
       in cases.entries) {
@@ -78,6 +87,9 @@ void main() {
           ),
         ),
       );
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)),
+      );
       await tester.pumpAndSettle();
       await expectLater(
         find.byType(PlateView),
@@ -87,4 +99,16 @@ void main() {
       controller.dispose();
     });
   }
+
+  test('the number is one field of three or four digits', () {
+    final PlateSpec spec = SerbiaPlates.private;
+    expect(spec.slots.map((PlateSlot s) => s.length), <int>[2, 4, 2]);
+    expect(spec.slots.map((PlateSlot s) => s.minLength), <int>[2, 3, 2]);
+    PlateController c = PlateController.fromValues(spec, ['BG', '123', 'AB']);
+    expect(c.isCompleted, isTrue);
+    c.dispose();
+    c = PlateController.fromValues(spec, ['BG', '12', 'AB']);
+    expect(c.isCompleted, isFalse);
+    c.dispose();
+  });
 }
