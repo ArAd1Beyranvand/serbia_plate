@@ -14,11 +14,8 @@ abstract final class SerbiaThemes {
     SerbiaColors.white,
     SerbiaColors.black,
   );
-  static final PlateTheme taxi = _theme(SerbiaColors.white, SerbiaColors.black);
-  static final PlateTheme trailer = _theme(
-    SerbiaColors.white,
-    SerbiaColors.black,
-  );
+  static final PlateTheme taxi = private;
+  static final PlateTheme trailer = private;
   static final PlateTheme police = _theme(
     SerbiaColors.policeBlue,
     SerbiaColors.white,
@@ -33,10 +30,7 @@ abstract final class SerbiaThemes {
     SerbiaColors.black,
     border: 0,
   );
-  static final PlateTheme oldtimer = _theme(
-    SerbiaColors.white,
-    SerbiaColors.black,
-  );
+  static final PlateTheme oldtimer = private;
   static final PlateTheme agricultural = _theme(
     SerbiaColors.agriculturalField,
     SerbiaColors.agriculturalInk,
@@ -45,10 +39,7 @@ abstract final class SerbiaThemes {
     SerbiaColors.mopedField,
     SerbiaColors.mopedInk,
   );
-  static final PlateTheme motorcycle = _theme(
-    SerbiaColors.white,
-    SerbiaColors.black,
-  );
+  static final PlateTheme motorcycle = private;
 }
 
 PlateTheme _theme(
