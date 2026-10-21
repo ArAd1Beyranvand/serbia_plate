@@ -30,13 +30,11 @@ class SerbiaValidator extends GatedPlateValidator {
   static const String reasonDigits = 'Check the number of digits.';
   static const String reasonLetters = 'Check the series letters.';
 
-  static bool _twoRegionLetters(String v) =>
-      v.length == 2 &&
-      v.split('').every(SerbiaAlphabets.regionLetters.characters.contains);
+  static bool _inAlphabet(String v, int n, PlateAlphabet alphabet) =>
+      v.length == n && v.split('').every(alphabet.characters.contains);
 
   static bool _letters(String v, int n) =>
-      v.length == n &&
-      v.split('').every(SerbiaAlphabets.letters.characters.contains);
+      _inAlphabet(v, n, SerbiaAlphabets.letters);
 
   PlateValidation _ok(bool ok, String reason) =>
       ok ? const PlateValidation.valid() : PlateValidation.invalid(reason);
@@ -77,7 +75,7 @@ class SerbiaValidator extends GatedPlateValidator {
 
   @override
   PlateValidation judge(PlateEntry entry) {
-    if (!_twoRegionLetters(entry.group('region'))) {
+    if (!_inAlphabet(entry.group('region'), 2, SerbiaAlphabets.regionLetters)) {
       return const PlateValidation.invalid(reasonRegion);
     }
     switch (entry.spec.id) {

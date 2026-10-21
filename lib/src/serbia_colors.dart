@@ -1,16 +1,13 @@
 import 'package:flutter/widgets.dart';
 
-/// The colours of the Serbian plates, sampled from the flattened photos by
-/// the offline stage (modal pixel of the region, colour-balanced).
+/// Colours of the Serbian plates, sampled from the flattened photos (modal
+/// pixel of the region, colour-balanced).
 ///
-/// White plates are `FFFFFF` and black ink `000000` where the artwork is
-/// vector (registration, taxi, trailer). The historic and motorcycle photos
-/// read a blue-tinted white (`ADCAF6`, `E4EDF9`): that is the camera, the
-/// article says white, so they use [white]. The agricultural green `0DEFC9`
-/// (a minty green) and the moped yellow `FFB627` are photographed fields and
-/// carry their photo's lighting, as do their inks `293744` and `686062`.
-/// The `SRB` band is `1145EA`; police blue `013F80`; diplomatic orange
-/// `FFA500` on black.
+/// White and black are exact where the artwork is vector (registration, taxi,
+/// trailer). The historic and motorcycle photos read a blue-tinted white:
+/// that is the camera, the article says white, so they use [white]. The
+/// agricultural and moped fields and their inks are photographed and carry
+/// their photo's lighting.
 abstract final class SerbiaColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);

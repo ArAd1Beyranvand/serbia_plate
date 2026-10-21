@@ -121,8 +121,7 @@ abstract final class _Layout {
   static const _Group rowsB = _Group('b', <double>[162, 203.5, 245], 40);
 }
 
-/// A keyed run of slots at the given centres, each [width] wide, each with
-/// the alphabet at the same position in `alphabets` (or all the one).
+/// A keyed run of slots at the given centres, each [width] wide.
 class _Group {
   const _Group(this.key, this.centres, this.width);
 
@@ -160,19 +159,13 @@ abstract final class SerbiaPlates {
   static final PlateSpec private = _oneLine(
     id: 'rs.private',
     groups: <_Part>[
-      _Part(_Layout.privateRegion, <PlateAlphabet>[
-        SerbiaAlphabets.regionLetters,
-        SerbiaAlphabets.regionLetters,
-      ]),
+      _Part(_Layout.privateRegion, _repeat(SerbiaAlphabets.regionLetters, 2)),
       _Part(
         _Layout.privateDigits,
         _repeat(SerbiaAlphabets.digits, 4),
         minLength: 3,
       ),
-      _Part(_Layout.privateLetters, <PlateAlphabet>[
-        SerbiaAlphabets.letters,
-        SerbiaAlphabets.letters,
-      ]),
+      _Part(_Layout.privateLetters, _repeat(SerbiaAlphabets.letters, 2)),
     ],
     seps: <(String, double)>[('·', 405)],
     crestCx: 189,
@@ -181,10 +174,7 @@ abstract final class SerbiaPlates {
   static final PlateSpec taxi = _oneLine(
     id: 'rs.taxi',
     groups: <_Part>[
-      _Part(_Layout.taxiRegion, <PlateAlphabet>[
-        SerbiaAlphabets.regionLetters,
-        SerbiaAlphabets.regionLetters,
-      ]),
+      _Part(_Layout.taxiRegion, _repeat(SerbiaAlphabets.regionLetters, 2)),
       _Part(_Layout.taxiDigits, _repeat(SerbiaAlphabets.digits, 5)),
       _Part(_Layout.taxiLetters, <PlateAlphabet>[
         SerbiaAlphabets.taxiFirst,
@@ -198,15 +188,9 @@ abstract final class SerbiaPlates {
   static final PlateSpec trailer = _oneLine(
     id: 'rs.trailer',
     groups: <_Part>[
-      _Part(_Layout.trailerLetters, <PlateAlphabet>[
-        SerbiaAlphabets.letters,
-        SerbiaAlphabets.letters,
-      ]),
+      _Part(_Layout.trailerLetters, _repeat(SerbiaAlphabets.letters, 2)),
       _Part(_Layout.trailerDigits, _repeat(SerbiaAlphabets.digits, 3)),
-      _Part(_Layout.trailerRegion, <PlateAlphabet>[
-        SerbiaAlphabets.regionLetters,
-        SerbiaAlphabets.regionLetters,
-      ]),
+      _Part(_Layout.trailerRegion, _repeat(SerbiaAlphabets.regionLetters, 2)),
     ],
     seps: <(String, double)>[('·', 177)],
     crestCx: 362,
@@ -298,10 +282,10 @@ abstract final class SerbiaPlates {
     moped,
     motorcycle,
   ];
-
-  static List<PlateAlphabet> _repeat(PlateAlphabet a, int n) =>
-      List<PlateAlphabet>.filled(n, a);
 }
+
+List<PlateAlphabet> _repeat(PlateAlphabet a, int n) =>
+    List<PlateAlphabet>.filled(n, a);
 
 /// A [_Group] with the alphabet of each of its cells. Neighbouring cells on
 /// the same alphabet are one field.
@@ -324,6 +308,11 @@ class _Stack {
   final double cx;
   final PlateAlphabet alphabet;
 }
+
+PlateSection _band(double end) => PlateSection.columns(<PlatePart>[
+  PlatePart(const PlateSection.fill(PlateFill.panel), end: end),
+  const PlatePart(PlateSection.plain),
+]);
 
 PlateBox _box(double cx, double width, double top, double height) =>
     PlateBox(cx - width / 2, top, width, height);
@@ -402,12 +391,7 @@ PlateSpec _oneLine({
     canvasHeight: _Layout.height,
     panel: const PlatePanel(box: PlateBox(0, 0, 0, 0)),
     noPanel: true,
-    background: band
-        ? const PlateSection.columns(<PlatePart>[
-            PlatePart(PlateSection.fill(PlateFill.panel), end: _Layout.bandEnd),
-            PlatePart(PlateSection.plain),
-          ])
-        : PlateSection.plain,
+    background: band ? _band(_Layout.bandEnd) : PlateSection.plain,
     slots: slots,
     mirrors: mirrors,
     labels: <PlateLabel>[
@@ -500,27 +484,19 @@ PlateSpec _twoRows({
   required List<PlateAlphabet> second,
   bool band = true,
 }) {
-  final List<PlateSlot> aFields = _fields(
-    first,
-    _Layout.rowsA.centres,
-    _Layout.rowsA.width,
+  List<PlateSlot> bottom(List<PlateAlphabet> alphabets, _Group g) => _fields(
+    alphabets,
+    g.centres,
+    g.width,
     _Layout.bottomRowTop,
     _Layout.bottomRowHeight,
   );
-  final List<PlateSlot> bFields = _fields(
-    second,
-    _Layout.rowsB.centres,
-    _Layout.rowsB.width,
-    _Layout.bottomRowTop,
-    _Layout.bottomRowHeight,
-  );
+  final List<PlateSlot> aFields = bottom(first, _Layout.rowsA);
+  final List<PlateSlot> bFields = bottom(second, _Layout.rowsB);
   final int aSlots = aFields.length, bSlots = bFields.length;
   final List<PlateSlot> slots = <PlateSlot>[
     ..._fields(
-      <PlateAlphabet>[
-        SerbiaAlphabets.regionLetters,
-        SerbiaAlphabets.regionLetters,
-      ],
+      _repeat(SerbiaAlphabets.regionLetters, 2),
       _Layout.rowsRegion.centres,
       _Layout.rowsRegion.width,
       _Layout.topRowTop,
@@ -540,15 +516,7 @@ PlateSpec _twoRows({
     noPanel: true,
     background: PlateSection.rows(<PlatePart>[
       PlatePart(
-        band
-            ? const PlateSection.columns(<PlatePart>[
-                PlatePart(
-                  PlateSection.fill(PlateFill.panel),
-                  end: _Layout.rowsBandEnd,
-                ),
-                PlatePart(PlateSection.plain),
-              ])
-            : PlateSection.plain,
+        band ? _band(_Layout.rowsBandEnd) : PlateSection.plain,
         end: _Layout.rowsDividerAt,
         divider: _Layout.rowsDivider,
       ),
