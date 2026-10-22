@@ -21,4 +21,5 @@ dev_dependencies:
 
 flutter:
   assets:
+    - assets/kosovo/icons/
     - assets/icons/

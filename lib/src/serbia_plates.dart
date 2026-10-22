@@ -50,37 +50,16 @@ abstract final class _Layout {
   static const double stackTop = 12, stackStep = 44, stackHeight = 45;
   static const double stackWidth = 30;
 
-  static const _Group privateRegion = _Group('region', <double>[
-    86.5,
-    135.8,
-  ], 48);
-  static const _Group privateDigits = _Group('digits', <double>[
-    231.5,
-    278,
-    324.5,
-    371,
-  ], 46);
-  static const _Group privateLetters = _Group('letters', <double>[
-    436,
-    480.5,
-  ], 46);
+  static const _Group privateRegion = _Group('region', <double>[86.5, 135.8], 48);
+  static const _Group privateDigits = _Group('digits', <double>[231.5, 278, 324.5, 371], 46);
+  static const _Group privateLetters = _Group('letters', <double>[436, 480.5], 46);
 
   static const _Group taxiRegion = _Group('region', <double>[73.5, 126], 48);
-  static const _Group taxiDigits = _Group('digits', <double>[
-    218,
-    257,
-    296,
-    335,
-    374,
-  ], 39);
+  static const _Group taxiDigits = _Group('digits', <double>[218, 257, 296, 335, 374], 39);
   static const _Group taxiLetters = _Group('letters', <double>[431, 478], 46);
 
   static const _Group trailerLetters = _Group('letters', <double>[91, 142], 48);
-  static const _Group trailerDigits = _Group('digits', <double>[
-    220,
-    267,
-    314,
-  ], 46);
+  static const _Group trailerDigits = _Group('digits', <double>[220, 267, 314], 46);
   static const _Group trailerRegion = _Group('region', <double>[418, 471], 48);
 
   static const _Group policeLetter = _Group('letter', <double>[87], 46);
@@ -89,19 +68,10 @@ abstract final class _Layout {
 
   static const _Group dipCode = _Group('code', <double>[145, 193], 46);
   static const _Group dipLetter = _Group('letter', <double>[262.8], 46);
-  static const _Group dipSerial = _Group('serial', <double>[
-    327,
-    372.5,
-    418,
-  ], 46);
+  static const _Group dipSerial = _Group('serial', <double>[327, 372.5, 418], 46);
 
   static const _Group militaryLetter = _Group('letter', <double>[168], 60);
-  static const _Group militaryDigits = _Group('digits', <double>[
-    298,
-    354,
-    410,
-    466,
-  ], 56);
+  static const _Group militaryDigits = _Group('digits', <double>[298, 354, 410, 466], 56);
 
   // Two rows.
   static const double rowsWidth = 300, rowsHeight = 195;
@@ -160,11 +130,7 @@ abstract final class SerbiaPlates {
     id: 'rs.private',
     groups: <_Part>[
       _Part(_Layout.privateRegion, _repeat(SerbiaAlphabets.regionLetters, 2)),
-      _Part(
-        _Layout.privateDigits,
-        _repeat(SerbiaAlphabets.digits, 4),
-        minLength: 3,
-      ),
+      _Part(_Layout.privateDigits, _repeat(SerbiaAlphabets.digits, 4), minLength: 3),
       _Part(_Layout.privateLetters, _repeat(SerbiaAlphabets.letters, 2)),
     ],
     seps: <(String, double)>[('·', 405)],
@@ -199,9 +165,7 @@ abstract final class SerbiaPlates {
   static final PlateSpec police = _oneLine(
     id: 'rs.police',
     groups: <_Part>[
-      _Part(_Layout.policeLetter, <PlateAlphabet>[
-        SerbiaAlphabets.policeLetter,
-      ]),
+      _Part(_Layout.policeLetter, <PlateAlphabet>[SerbiaAlphabets.policeLetter]),
       _Part(_Layout.policeA, _repeat(SerbiaAlphabets.digits, 3)),
       _Part(_Layout.policeB, _repeat(SerbiaAlphabets.digits, 3)),
     ],
@@ -214,9 +178,7 @@ abstract final class SerbiaPlates {
     id: 'rs.diplomatic',
     groups: <_Part>[
       _Part(_Layout.dipCode, _repeat(SerbiaAlphabets.digits, 2)),
-      _Part(_Layout.dipLetter, <PlateAlphabet>[
-        SerbiaAlphabets.diplomaticLetters,
-      ]),
+      _Part(_Layout.dipLetter, <PlateAlphabet>[SerbiaAlphabets.diplomaticLetters]),
       _Part(_Layout.dipSerial, _repeat(SerbiaAlphabets.digits, 3)),
     ],
     seps: <(String, double)>[('·', 228.5), ('·', 296.5)],
@@ -244,10 +206,7 @@ abstract final class SerbiaPlates {
 
   static final PlateSpec oldtimer = _twoRows(
     id: 'rs.oldtimer',
-    first: <PlateAlphabet>[
-      SerbiaAlphabets.oldtimerFirst,
-      SerbiaAlphabets.oldtimerSecond,
-    ],
+    first: <PlateAlphabet>[SerbiaAlphabets.oldtimerFirst, SerbiaAlphabets.oldtimerSecond],
     second: _repeat(SerbiaAlphabets.digits, 3),
   );
 
@@ -284,8 +243,7 @@ abstract final class SerbiaPlates {
   ];
 }
 
-List<PlateAlphabet> _repeat(PlateAlphabet a, int n) =>
-    List<PlateAlphabet>.filled(n, a);
+List<PlateAlphabet> _repeat(PlateAlphabet a, int n) => List<PlateAlphabet>.filled(n, a);
 
 /// A [_Group] with the alphabet of each of its cells. Neighbouring cells on
 /// the same alphabet are one field.
@@ -338,20 +296,13 @@ PlateSpec _oneLine({
     final int start = slots.length;
     slots.addAll(made);
     textGroups.add(
-      PlateTextGroup(<int>[
-        for (int i = 0; i < made.length; i++) start + i,
-      ], key: key),
+      PlateTextGroup(<int>[for (int i = 0; i < made.length; i++) start + i], key: key),
     );
     if (echo && key == 'region') {
       mirrors.add(
         PlateMirror(
           source: start,
-          box: _box(
-            crestCx,
-            _Layout.echoSpan,
-            _Layout.echoTop,
-            _Layout.echoHeight,
-          ),
+          box: _box(crestCx, _Layout.echoSpan, _Layout.echoTop, _Layout.echoHeight),
           glyphHeight: _Layout.echoGlyph,
           alphabet: SerbiaAlphabets.regionCyrillic,
         ),
@@ -381,8 +332,7 @@ PlateSpec _oneLine({
   }
 
   final PlateBox crest =
-      crestBox ??
-      _box(crestCx, _Layout.crestWidth, _Layout.crestTop, _Layout.crestHeight);
+      crestBox ?? _box(crestCx, _Layout.crestWidth, _Layout.crestTop, _Layout.crestHeight);
 
   return PlateSpec(
     id: id,
@@ -398,12 +348,7 @@ PlateSpec _oneLine({
       if (band)
         const PlateLabel(
           text: 'SRB',
-          box: PlateBox(
-            _Layout.sloLeft,
-            _Layout.sloTop,
-            _Layout.sloWidth,
-            _Layout.sloHeight,
-          ),
+          box: PlateBox(_Layout.sloLeft, _Layout.sloTop, _Layout.sloWidth, _Layout.sloHeight),
           glyphHeight: _Layout.sloGlyph,
           color: SerbiaColors.white,
         ),
@@ -415,8 +360,7 @@ PlateSpec _oneLine({
         ),
     ],
     decals: <PlateDecal>[
-      if (crestCx > 0 || crestBox != null)
-        PlateDecal(image: _crest, box: crest),
+      if (crestCx > 0 || crestBox != null) PlateDecal(image: _crest, box: crest),
     ],
     textGroups: textGroups,
     resolveRegion: SerbiaRegions.captionOf,
@@ -446,18 +390,13 @@ List<PlateSlot> _fields(
     final int count = j - i;
     slots.add(
       count == 1
-          ? PlateSlot(
-              alphabet: alphabets[i],
-              box: _box(centres[i], width, top, height),
-            )
+          ? PlateSlot(alphabet: alphabets[i], box: _box(centres[i], width, top, height))
           : PlateSlot(
               alphabet: alphabets[i],
               box: PlateBox(centres[i] - pitch / 2, top, count * pitch, height),
               length: count,
               minLength: minLength,
-              spacing: minLength == null
-                  ? max(0, pitch - 0.6 * 0.72 * height)
-                  : 0,
+              spacing: minLength == null ? max(0, pitch - 0.6 * 0.72 * height) : 0,
             ),
     );
     i = j;
@@ -484,13 +423,8 @@ PlateSpec _twoRows({
   required List<PlateAlphabet> second,
   bool band = true,
 }) {
-  List<PlateSlot> bottom(List<PlateAlphabet> alphabets, _Group g) => _fields(
-    alphabets,
-    g.centres,
-    g.width,
-    _Layout.bottomRowTop,
-    _Layout.bottomRowHeight,
-  );
+  List<PlateSlot> bottom(List<PlateAlphabet> alphabets, _Group g) =>
+      _fields(alphabets, g.centres, g.width, _Layout.bottomRowTop, _Layout.bottomRowHeight);
   final List<PlateSlot> aFields = bottom(first, _Layout.rowsA);
   final List<PlateSlot> bFields = bottom(second, _Layout.rowsB);
   final int aSlots = aFields.length, bSlots = bFields.length;
@@ -526,12 +460,7 @@ PlateSpec _twoRows({
     mirrors: <PlateMirror>[
       PlateMirror(
         source: 0,
-        box: _box(
-          crestCx,
-          _Layout.rowsEchoSpan,
-          _Layout.rowsEchoTop,
-          _Layout.echoHeight,
-        ),
+        box: _box(crestCx, _Layout.rowsEchoSpan, _Layout.rowsEchoTop, _Layout.echoHeight),
         glyphHeight: _Layout.echoGlyph,
         alphabet: SerbiaAlphabets.regionCyrillic,
       ),
@@ -575,9 +504,7 @@ PlateSpec _twoRows({
     textGroups: <PlateTextGroup>[
       const PlateTextGroup(<int>[0], key: 'region'),
       PlateTextGroup(<int>[for (int i = 0; i < aSlots; i++) 1 + i], key: 'a'),
-      PlateTextGroup(<int>[
-        for (int i = 0; i < bSlots; i++) 1 + aSlots + i,
-      ], key: 'b'),
+      PlateTextGroup(<int>[for (int i = 0; i < bSlots; i++) 1 + aSlots + i], key: 'b'),
     ],
   );
 }

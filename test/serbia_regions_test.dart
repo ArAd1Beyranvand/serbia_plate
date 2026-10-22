@@ -15,10 +15,7 @@ void main() {
   });
 
   test('the private and trailer plates follow the code typed and deleted', () {
-    for (final PlateSpec spec in <PlateSpec>[
-      SerbiaPlates.private,
-      SerbiaPlates.trailer,
-    ]) {
+    for (final PlateSpec spec in <PlateSpec>[SerbiaPlates.private, SerbiaPlates.trailer]) {
       final PlateController c = PlateController(spec: spec);
       expect(c.regionCaption, isNull, reason: spec.id);
       c.setGroup('region', 'N');

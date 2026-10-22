@@ -9,3 +9,4 @@ export 'src/serbia_regions.dart';
 export 'src/serbia_themes.dart';
 export 'src/serbia_validators.dart';
 export 'package:plate_alphabet/plate_alphabet.dart' show SerbiaAlphabets;
+export 'src/kosovo/kosovo_plate.dart';
