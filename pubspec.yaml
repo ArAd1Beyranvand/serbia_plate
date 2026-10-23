@@ -1,7 +1,7 @@
 name: serbia_plate
 description: "Serbia's licence plates for the plate_core library — ten categories on a white, blue, orange-on-black, green or yellow field, one theme each, the Latin and Cyrillic area-code alphabets, and an advisory validator."
 version: 0.1.0
-publish_to: none
+repository: https://github.com/ArAd1Beyranvand/serbia_plate
 resolution: workspace
 
 environment:
