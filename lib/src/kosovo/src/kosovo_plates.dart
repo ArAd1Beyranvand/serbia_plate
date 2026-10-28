@@ -144,7 +144,11 @@ abstract final class KosovoPlates {
     ],
     dashes: const <_Dash>[_Dash(386)],
     labels: const <PlateLabel>[
-      PlateLabel(text: 'POLICE', box: PlateBox(52, 28, 121, 54), glyphHeight: _Layout.captionGlyph),
+      PlateLabel(
+        text: 'POLICE',
+        box: PlateBox(52, 28, 121, 54),
+        glyphHeight: _Layout.captionGlyph,
+      ),
     ],
   );
 
@@ -210,9 +214,17 @@ abstract final class KosovoPlates {
       _Field('mark', _letters, 208, 39.7, 2, top: 7, height: 96),
       _Field('series', _digits, 327, 39.7, 3, top: 7, height: 96),
     ],
-    dashes: const <_Dash>[_Dash(168, top: 7, height: 96), _Dash(287, top: 7, height: 96)],
+    dashes: const <_Dash>[
+      _Dash(168, top: 7, height: 96),
+      _Dash(287, top: 7, height: 96),
+    ],
     labels: const <PlateLabel>[
-      PlateLabel(text: 'RKS', box: PlateBox(14, 15, 36, 80), glyphHeight: 24, rotated: true),
+      PlateLabel(
+        text: 'RKS',
+        box: PlateBox(14, 15, 36, 80),
+        glyphHeight: 24,
+        rotated: true,
+      ),
     ],
   );
 
@@ -307,7 +319,12 @@ abstract final class KosovoPlates {
   /// The field as one slot: its box spans the cells at their pitch.
   static PlateSlot _slot(_Field f) => PlateSlot(
     alphabet: f.alphabet,
-    box: PlateBox(f.firstCentre - f.pitch / 2, f.top, f.count * f.pitch, f.height),
+    box: PlateBox(
+      f.firstCentre - f.pitch / 2,
+      f.top,
+      f.count * f.pitch,
+      f.height,
+    ),
     length: f.count,
     spacing: max(0, f.pitch - 0.6 * 0.72 * f.height),
   );
@@ -326,7 +343,9 @@ abstract final class KosovoPlates {
     double? stripBottom,
     PlateBox stripCaption = _Layout.rks,
   }) {
-    const PlateSection blue = PlateSection.fill(PlateFill.color(KosovoColors.rksBlue));
+    const PlateSection blue = PlateSection.fill(
+      PlateFill.color(KosovoColors.rksBlue),
+    );
     return PlateSpec(
       id: id,
       country: KosovoCountry.kosovo,
@@ -361,7 +380,12 @@ abstract final class KosovoPlates {
         for (final _Dash d in dashes)
           PlateLabel(
             text: '-',
-            box: PlateBox(d.cx - _Layout.dashWidth / 2, d.top, _Layout.dashWidth, d.height),
+            box: PlateBox(
+              d.cx - _Layout.dashWidth / 2,
+              d.top,
+              _Layout.dashWidth,
+              d.height,
+            ),
             glyphHeight: d.height,
           ),
       ],
@@ -380,7 +404,8 @@ abstract final class KosovoPlates {
         ...decals,
       ],
       textGroups: <PlateTextGroup>[
-        for (int i = 0; i < fields.length; i++) PlateTextGroup(<int>[i], key: fields[i].key),
+        for (int i = 0; i < fields.length; i++)
+          PlateTextGroup(<int>[i], key: fields[i].key),
       ],
     );
   }

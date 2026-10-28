@@ -25,7 +25,10 @@ abstract final class KosovoThemes {
   );
 
   /// Black on white in a black rim: private, government.
-  static final PlateTheme private = _theme(field: KosovoColors.white, ink: KosovoColors.black);
+  static final PlateTheme private = _theme(
+    field: KosovoColors.white,
+    ink: KosovoColors.black,
+  );
 
   /// Black on white, no rim: moped and the UNMIK-style KS plate.
   static final PlateTheme plain = _theme(

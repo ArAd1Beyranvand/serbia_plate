@@ -39,40 +39,47 @@ class KosovoValidator extends GatedPlateValidator {
   static final RegExp _threeDigits = RegExp(r'^\d{3}$');
   static final RegExp _twoLetters = RegExp(r'^[A-Z]{2}$');
 
-  static final Map<String, Map<String, RegExp>> _formats = <String, Map<String, RegExp>>{
-    'xk.private': _districtPlate,
-    'xk.agriculture': _districtPlate,
-    'xk.trailer': _districtPlate,
-    'xk.moped': _districtPlate,
-    'xk.government': <String, RegExp>{
-      'agency': RegExp(r'^\d[A-Z]$'),
-      'serial': _threeDigits,
-      'series': _twoDigits,
-    },
-    'xk.police': <String, RegExp>{'serial': _threeDigits, 'series': _twoDigits},
-    'xk.emergency': <String, RegExp>{
-      'service': _threeDigits,
-      'serial': _threeDigits,
-      'series': _twoDigits,
-    },
-    'xk.customs': <String, RegExp>{'serial': _threeDigits, 'series': _twoLetters},
-    'xk.military': <String, RegExp>{
-      'unit': RegExp(r'^[A-Z]{3}$'),
-      'serial': _threeDigits,
-      'series': _twoDigits,
-    },
-    'xk.unmik': <String, RegExp>{
-      'serial': _threeDigits,
-      'mark': _twoLetters,
-      'series': _threeDigits,
-    },
-    'xk.diplomatic': <String, RegExp>{
-      'region': _twoDigits,
-      'mark': _twoLetters,
-      'series': _threeDigits,
-    },
-    'xk.eulex': <String, RegExp>{'series': RegExp(r'^\d{4}$')},
-  };
+  static final Map<String, Map<String, RegExp>> _formats =
+      <String, Map<String, RegExp>>{
+        'xk.private': _districtPlate,
+        'xk.agriculture': _districtPlate,
+        'xk.trailer': _districtPlate,
+        'xk.moped': _districtPlate,
+        'xk.government': <String, RegExp>{
+          'agency': RegExp(r'^\d[A-Z]$'),
+          'serial': _threeDigits,
+          'series': _twoDigits,
+        },
+        'xk.police': <String, RegExp>{
+          'serial': _threeDigits,
+          'series': _twoDigits,
+        },
+        'xk.emergency': <String, RegExp>{
+          'service': _threeDigits,
+          'serial': _threeDigits,
+          'series': _twoDigits,
+        },
+        'xk.customs': <String, RegExp>{
+          'serial': _threeDigits,
+          'series': _twoLetters,
+        },
+        'xk.military': <String, RegExp>{
+          'unit': RegExp(r'^[A-Z]{3}$'),
+          'serial': _threeDigits,
+          'series': _twoDigits,
+        },
+        'xk.unmik': <String, RegExp>{
+          'serial': _threeDigits,
+          'mark': _twoLetters,
+          'series': _threeDigits,
+        },
+        'xk.diplomatic': <String, RegExp>{
+          'region': _twoDigits,
+          'mark': _twoLetters,
+          'series': _threeDigits,
+        },
+        'xk.eulex': <String, RegExp>{'series': RegExp(r'^\d{4}$')},
+      };
 
   static final Map<String, RegExp> _districtPlate = <String, RegExp>{
     'region': _district,
@@ -87,7 +94,9 @@ class KosovoValidator extends GatedPlateValidator {
     for (final MapEntry<String, RegExp> f in format.entries) {
       final String value = entry.group(f.key);
       if (!f.value.hasMatch(value)) {
-        return PlateValidation.invalid(f.key == 'region' ? reasonDistrict : reason);
+        return PlateValidation.invalid(
+          f.key == 'region' ? reasonDistrict : reason,
+        );
       }
     }
     return const PlateValidation.valid();

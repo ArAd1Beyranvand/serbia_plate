@@ -25,27 +25,43 @@ void main() {
 
   /// category id -> (spec, theme, sample value: one space-separated token
   /// per slot, i.e. per field — `'AB 1234'`, never `'A B 1 2 3 4'`)
-  final Map<String, (PlateSpec, PlateTheme, String)> cases =
-      <String, (PlateSpec, PlateTheme, String)>{
-        'private': (KosovoPlates.private, KosovoThemes.private, '01 999 AD'),
-        'government': (KosovoPlates.government, KosovoThemes.private, '3Z 107 07'),
-        'police': (KosovoPlates.police, KosovoThemes.police, '999 01'),
-        'emergency': (KosovoPlates.emergency, KosovoThemes.emergency, '112 001 01'),
-        'customs': (KosovoPlates.customs, KosovoThemes.customs, '001 DG'),
-        'military': (KosovoPlates.military, KosovoThemes.military, 'KSF 000 01'),
-        'unmik': (KosovoPlates.unmik, KosovoThemes.plain, '648 KS 678'),
-        'unmik_customs': (KosovoPlates.unmik, KosovoThemes.unmikCustoms, '095 KS 001'),
-        'diplomatic': (KosovoPlates.diplomatic, KosovoThemes.diplomatic, '16 CD 009'),
-        'eulex': (KosovoPlates.eulex, KosovoThemes.eulex, '5250'),
-        'agriculture': (KosovoPlates.agriculture, KosovoThemes.agriculture, '01 101 VA'),
-        'trailer': (KosovoPlates.trailer, KosovoThemes.trailer, '01 427 TA'),
-        'moped': (KosovoPlates.moped, KosovoThemes.plain, '04 138 RA'),
-      };
+  final Map<String, (PlateSpec, PlateTheme, String)>
+  cases = <String, (PlateSpec, PlateTheme, String)>{
+    'private': (KosovoPlates.private, KosovoThemes.private, '01 999 AD'),
+    'government': (KosovoPlates.government, KosovoThemes.private, '3Z 107 07'),
+    'police': (KosovoPlates.police, KosovoThemes.police, '999 01'),
+    'emergency': (KosovoPlates.emergency, KosovoThemes.emergency, '112 001 01'),
+    'customs': (KosovoPlates.customs, KosovoThemes.customs, '001 DG'),
+    'military': (KosovoPlates.military, KosovoThemes.military, 'KSF 000 01'),
+    'unmik': (KosovoPlates.unmik, KosovoThemes.plain, '648 KS 678'),
+    'unmik_customs': (
+      KosovoPlates.unmik,
+      KosovoThemes.unmikCustoms,
+      '095 KS 001',
+    ),
+    'diplomatic': (
+      KosovoPlates.diplomatic,
+      KosovoThemes.diplomatic,
+      '16 CD 009',
+    ),
+    'eulex': (KosovoPlates.eulex, KosovoThemes.eulex, '5250'),
+    'agriculture': (
+      KosovoPlates.agriculture,
+      KosovoThemes.agriculture,
+      '01 101 VA',
+    ),
+    'trailer': (KosovoPlates.trailer, KosovoThemes.trailer, '01 427 TA'),
+    'moped': (KosovoPlates.moped, KosovoThemes.plain, '04 138 RA'),
+  };
 
-  for (final MapEntry<String, (PlateSpec, PlateTheme, String)> c in cases.entries) {
+  for (final MapEntry<String, (PlateSpec, PlateTheme, String)> c
+      in cases.entries) {
     testWidgets(c.key, (tester) async {
       final (PlateSpec spec, PlateTheme theme, String values) = c.value;
-      final PlateController controller = PlateController.fromValues(spec, values.split(' '));
+      final PlateController controller = PlateController.fromValues(
+        spec,
+        values.split(' '),
+      );
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -67,7 +83,10 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await expectLater(find.byType(PlateView), matchesGoldenFile('goldens/xk_${c.key}.png'));
+      await expectLater(
+        find.byType(PlateView),
+        matchesGoldenFile('goldens/xk_${c.key}.png'),
+      );
       await tester.pumpWidget(const SizedBox.shrink());
       controller.dispose();
     });

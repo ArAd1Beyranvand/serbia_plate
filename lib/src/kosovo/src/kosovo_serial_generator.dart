@@ -11,7 +11,10 @@ abstract final class KosovoSerialGenerator {
       for (final PlateSlot slot in spec.slots)
         List<String>.generate(
           slot.length,
-          (_) => slot.alphabet.characters[rnd.nextInt(slot.alphabet.characters.length)],
+          (_) =>
+              slot.alphabet.characters[rnd.nextInt(
+                slot.alphabet.characters.length,
+              )],
         ).join(),
     ];
     void fill(String key, String text) {

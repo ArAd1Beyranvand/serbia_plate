@@ -94,5 +94,6 @@ abstract final class SerbiaRegions {
   }
 
   /// A [PlateLabelResolver] for [PlateSpec.resolveRegion].
-  static String? captionOf(String Function(String key) group) => lookup(group('region'));
+  static String? captionOf(String Function(String key) group) =>
+      lookup(group('region'));
 }
