@@ -130,6 +130,9 @@ class _Group {
   final double width;
 }
 
+// TODO(py): [H2][D6] ImageProvider: reference the raster as package + path; importlib.resources.
+// TODO(ts): [H2][D6] ImageProvider: reference the raster as package + path; import as asset URL.
+// TODO(kt): [H2][D6] ImageProvider: reference the raster as package + path; Res/compose resources.
 const AssetImage _crest = AssetImage(
   // Commons: File:Coat of arms of Serbia small.svg, the shield cut out of it.
   'assets/icons/coat_of_arms_shield.png',

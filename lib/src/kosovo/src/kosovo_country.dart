@@ -17,6 +17,9 @@ abstract final class KosovoCountry {
     panelColor: KosovoColors.rksBlue,
     panelTextColor: KosovoColors.rksGold,
     flagAspectRatio: 7 / 5,
+    // TODO(py): [H20][D6] flag asset by package + path; convert to PlateDrawing at export time.
+    // TODO(ts): [H20][D6] flag asset by package + path; convert to PlateDrawing at export time.
+    // TODO(kt): [H20][D6] flag asset by package + path; convert to PlateDrawing at export time.
     flag: SvgPlateAsset(
       'assets/kosovo/icons/flag_of_kosovo.svg',
       package: 'serbia_plate',

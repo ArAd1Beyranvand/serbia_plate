@@ -14,6 +14,9 @@ abstract final class KosovoDistricts {
   };
 }
 
+// TODO(py): [D4-code] hand-port; reason strings are the contract, keep them byte-identical.
+// TODO(ts): [D4-code] hand-port; reason strings are the contract, keep them byte-identical.
+// TODO(kt): [D4-code] hand-port; reason strings are the contract, keep them byte-identical.
 /// Judges a Kosovar plate field by field.
 ///
 /// Formats (the article gives `01 234-AB`; the rest are read off the
@@ -34,6 +37,9 @@ class KosovoValidator extends GatedPlateValidator {
   static const String reason = 'The plate does not match its format.';
   static const String reasonDistrict = 'The district code is 01 to 07.';
 
+  // TODO(py): [H9] Python re: \d/\w match Unicode; keep explicit [0-9]/[A-Z] classes (or re.ASCII).
+  // TODO(ts): [H9] same flavour as Dart; port as is, cover accept/reject in the vectors (D9).
+  // TODO(kt): [H9] Regex engine differs per target (JVM/JS/Native): keep to portable syntax.
   static final RegExp _district = RegExp(r'^0[1-7]$');
   static final RegExp _twoDigits = RegExp(r'^\d{2}$');
   static final RegExp _threeDigits = RegExp(r'^\d{3}$');

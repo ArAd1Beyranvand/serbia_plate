@@ -395,6 +395,9 @@ abstract final class KosovoPlates {
         // the .png. A crest, so a decal rather than painted.
         if (crest != null)
           PlateDecal(
+            // TODO(py): [H2][D6] ImageProvider: reference the raster as package + path; importlib.resources.
+            // TODO(ts): [H2][D6] ImageProvider: reference the raster as package + path; import as asset URL.
+            // TODO(kt): [H2][D6] ImageProvider: reference the raster as package + path; Res/compose resources.
             image: const AssetImage(
               'assets/kosovo/icons/coat_of_arms_of_kosovo.png',
               package: 'serbia_plate',
