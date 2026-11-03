@@ -7,7 +7,6 @@ import 'serbia_colors.dart';
 abstract final class SerbiaCountry {
   static const PlateCountry serbia = PlateCountry(
     code: 'rs',
-    captionLines: <String>[],
     panelColor: SerbiaColors.band,
     panelTextColor: SerbiaColors.white,
   );

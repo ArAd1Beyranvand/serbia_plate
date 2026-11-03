@@ -14,8 +14,7 @@ abstract final class SerbiaThemes {
     SerbiaColors.white,
     SerbiaColors.black,
   );
-  static final PlateTheme taxi = private;
-  static final PlateTheme trailer = private;
+  static final PlateTheme taxi = private, trailer = private;
   static final PlateTheme police = _theme(
     SerbiaColors.policeBlue,
     SerbiaColors.white,
@@ -50,7 +49,6 @@ PlateTheme _theme(
 }) => PlateTheme.monochrome(
   field: field,
   ink: ink,
-  inactive: SerbiaColors.inactive,
   borderWidthRatio: border,
   plateRadiusRatio: 0.07,
 ).copyWith(plateBorder: frame ?? ink);

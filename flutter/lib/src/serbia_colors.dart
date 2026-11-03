@@ -20,6 +20,4 @@ abstract final class SerbiaColors {
   static const Color agriculturalInk = Color(0xFF293744);
   static const Color mopedField = Color(0xFFFFB627);
   static const Color mopedInk = Color(0xFF686062);
-
-  static const Color inactive = Color(0xFFB0B0B0);
 }

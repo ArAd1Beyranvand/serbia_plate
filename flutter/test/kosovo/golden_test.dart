@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:serbia_plate/serbia_plate.dart';
 import 'package:plate_core/plate_core.dart';
+import 'package:plate_core/testing.dart';
 
 /// One golden per category, drawn with real bold faces so the ink can be
 /// measured against the references (`platekit golden-check`).
@@ -62,33 +62,13 @@ void main() {
         spec,
         values.split(' '),
       );
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: SizedBox(
-                width: 680,
-                height: 300,
-                child: PlateThemeScope(
-                  theme: theme,
-                  child: PlateView(
-                    controller: controller,
-                    theme: theme,
-                    country: KosovoCountry.kosovo,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+      await pumpPlateGolden(
+        tester,
+        controller,
+        'goldens/xk_${c.key}.png',
+        theme: theme,
+        country: KosovoCountry.kosovo,
       );
-      await tester.pumpAndSettle();
-      await expectLater(
-        find.byType(PlateView),
-        matchesGoldenFile('goldens/xk_${c.key}.png'),
-      );
-      await tester.pumpWidget(const SizedBox.shrink());
-      controller.dispose();
     });
   }
 }

@@ -1,9 +1,6 @@
 import 'package:plate_alphabet/plate_alphabet.dart';
 import 'package:plate_core/plate_core.dart';
 
-// TODO(py): [D4-code] hand-port; reason strings are the contract, keep them byte-identical.
-// TODO(ts): [D4-code] hand-port; reason strings are the contract, keep them byte-identical.
-// TODO(kt): [D4-code] hand-port; reason strings are the contract, keep them byte-identical.
 /// Judges a Serbian plate by its keyed groups; which groups exist depends on
 /// the design, read off the spec id. Reports, never bars a keystroke.
 ///
@@ -24,10 +21,7 @@ import 'package:plate_core/plate_core.dart';
 /// The article's region table is cut off after `LO`, so any two letters of the
 /// region alphabet are accepted rather than a fixed list.
 class SerbiaValidator extends GatedPlateValidator {
-  const SerbiaValidator();
-
-  @override
-  String get gateGroup => 'region';
+  const SerbiaValidator() : super('region');
 
   static const String reasonRegion = 'The area code is two letters, e.g. BG.';
   static const String reasonDigits = 'Check the number of digits.';

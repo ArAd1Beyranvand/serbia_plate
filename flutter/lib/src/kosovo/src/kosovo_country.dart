@@ -13,13 +13,9 @@ import 'kosovo_colors.dart';
 abstract final class KosovoCountry {
   static const PlateCountry kosovo = PlateCountry(
     code: 'xk',
-    captionLines: <String>[],
     panelColor: KosovoColors.rksBlue,
     panelTextColor: KosovoColors.rksGold,
     flagAspectRatio: 7 / 5,
-    // TODO(py): [H20][D6] flag asset by package + path; convert to PlateDrawing at export time.
-    // TODO(ts): [H20][D6] flag asset by package + path; convert to PlateDrawing at export time.
-    // TODO(kt): [H20][D6] flag asset by package + path; convert to PlateDrawing at export time.
     flag: SvgPlateAsset(
       'assets/kosovo/icons/flag_of_kosovo.svg',
       package: 'serbia_plate',

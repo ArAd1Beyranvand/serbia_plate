@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/painting.dart' show AssetImage;
 import 'package:plate_alphabet/plate_alphabet.dart';
 import 'package:plate_core/plate_core.dart';
@@ -35,16 +33,12 @@ import 'serbia_regions.dart';
 /// 162, 203, 245. Top `BG` centres from the sheet at about ±5.
 abstract final class _Layout {
   // One line.
-  static const double width = 520, height = 110;
-  static const double bandEnd = 48;
-  static const double top = 0;
+  static const double width = 520, height = 110, bandEnd = 48, top = 0;
   static const double sloLeft = 4, sloTop = 76, sloWidth = 40, sloHeight = 30;
-  static const double sloGlyph = 26;
-  static const double crestTop = 30.5, crestHeight = 41.5;
+  static const double sloGlyph = 26, crestTop = 30.5, crestHeight = 41.5;
   static const double crestWidth = 31.2;
   static const double echoTop = 70.5, echoHeight = 30, echoGlyph = 30;
-  static const double echoSpan = 34;
-  static const double dotGlyph = 50, sepWidth = 30;
+  static const double echoSpan = 34, dotGlyph = 50, sepWidth = 30;
 
   static const double dipTop = 10, dipHeight = 90;
   static const double stackTop = 12, stackStep = 44, stackHeight = 45;
@@ -105,8 +99,7 @@ abstract final class _Layout {
 
   // Two rows.
   static const double rowsWidth = 300, rowsHeight = 195;
-  static const double rowsBandEnd = 40, rowsDividerAt = 105;
-  static const double rowsDivider = 2;
+  static const double rowsBandEnd = 40, rowsDividerAt = 105, rowsDivider = 2;
   static const double topRowTop = 8, topRowHeight = 96;
   static const double bottomRowTop = 108, bottomRowHeight = 82;
   static const double rowsCrestLeft = 224.2, rowsCrestTop = 24.8;
@@ -130,9 +123,6 @@ class _Group {
   final double width;
 }
 
-// TODO(py): [H2][D6] ImageProvider: reference the raster as package + path; importlib.resources.
-// TODO(ts): [H2][D6] ImageProvider: reference the raster as package + path; import as asset URL.
-// TODO(kt): [H2][D6] ImageProvider: reference the raster as package + path; Res/compose resources.
 const AssetImage _crest = AssetImage(
   // Commons: File:Coat of arms of Serbia small.svg, the shield cut out of it.
   'assets/icons/coat_of_arms_shield.png',
@@ -392,8 +382,6 @@ PlateSpec _oneLine({
     country: SerbiaCountry.serbia,
     canvasWidth: _Layout.width,
     canvasHeight: _Layout.height,
-    panel: const PlatePanel(box: PlateBox(0, 0, 0, 0)),
-    noPanel: true,
     background: band ? _band(_Layout.bandEnd) : PlateSection.plain,
     slots: slots,
     mirrors: mirrors,
@@ -458,9 +446,7 @@ List<PlateSlot> _fields(
               box: PlateBox(centres[i] - pitch / 2, top, count * pitch, height),
               length: count,
               minLength: minLength,
-              spacing: minLength == null
-                  ? max(0, pitch - 0.6 * 0.72 * height)
-                  : 0,
+              spacing: minLength == null ? plateRunSpacing(pitch, height) : 0,
             ),
     );
     i = j;
@@ -515,8 +501,6 @@ PlateSpec _twoRows({
     country: SerbiaCountry.serbia,
     canvasWidth: _Layout.rowsWidth,
     canvasHeight: _Layout.rowsHeight,
-    panel: const PlatePanel(box: PlateBox(0, 0, 0, 0)),
-    noPanel: true,
     background: PlateSection.rows(<PlatePart>[
       PlatePart(
         band ? _band(_Layout.rowsBandEnd) : PlateSection.plain,

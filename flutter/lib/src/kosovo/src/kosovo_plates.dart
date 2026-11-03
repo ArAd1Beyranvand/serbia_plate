@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 import 'package:plate_alphabet/plate_alphabet.dart';
 import 'package:plate_core/plate_core.dart';
@@ -48,8 +46,7 @@ import 'kosovo_country.dart';
 /// over the ink span. The year sticker on the CD plate and the `EU` text on
 /// EULEX are not drawn.
 abstract final class _Layout {
-  static const double width = 520, height = 110;
-  static const double box = 110;
+  static const double width = 520, height = 110, box = 110;
 
   static const double bandEnd = 47.3;
   static const PlateBox rks = PlateBox(5, 70, 40, 24);
@@ -317,16 +314,14 @@ abstract final class KosovoPlates {
   ];
 
   /// The field as one slot: its box spans the cells at their pitch.
-  static PlateSlot _slot(_Field f) => PlateSlot(
-    alphabet: f.alphabet,
-    box: PlateBox(
-      f.firstCentre - f.pitch / 2,
-      f.top,
-      f.count * f.pitch,
-      f.height,
-    ),
-    length: f.count,
-    spacing: max(0, f.pitch - 0.6 * 0.72 * f.height),
+  static PlateSlot _slot(_Field f) => plateRun(
+    f.alphabet,
+    f.count,
+    left: f.firstCentre - f.pitch / 2,
+    top: f.top,
+    pitch: f.pitch,
+    height: f.height,
+    group: f.key,
   );
 
   static PlateSpec _spec({
@@ -395,9 +390,6 @@ abstract final class KosovoPlates {
         // the .png. A crest, so a decal rather than painted.
         if (crest != null)
           PlateDecal(
-            // TODO(py): [H2][D6] ImageProvider: reference the raster as package + path; importlib.resources.
-            // TODO(ts): [H2][D6] ImageProvider: reference the raster as package + path; import as asset URL.
-            // TODO(kt): [H2][D6] ImageProvider: reference the raster as package + path; Res/compose resources.
             image: const AssetImage(
               'assets/kosovo/icons/coat_of_arms_of_kosovo.png',
               package: 'serbia_plate',
@@ -405,10 +397,6 @@ abstract final class KosovoPlates {
             box: crest,
           ),
         ...decals,
-      ],
-      textGroups: <PlateTextGroup>[
-        for (int i = 0; i < fields.length; i++)
-          PlateTextGroup(<int>[i], key: fields[i].key),
       ],
     );
   }

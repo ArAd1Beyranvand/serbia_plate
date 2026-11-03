@@ -6,13 +6,24 @@ GO VEGAN 🌱
 
 From the mighty people of Iran to the resilient people of Serbia to view examples:
 
-https://platexample.ir/#/discover/serbia
+https://platexample.ir/#/discover/serbia:flutter
 
 # serbia_plate
 
-Serbian licence plates for `plate_core`.
+Serbia's licence plates for plate_core: ten categories on a white, blue, orange-on-black, green or yellow field, one theme each, the Latin, and more.
 
-## Install
+## Languages
+
+| Language | Folder | Example |
+| --- | --- | --- |
+| Flutter / Dart | [`flutter/`](https://github.com/ArAd1Beyranvand/serbia_plate/tree/main/flutter) | [platexample](https://platexample.ir/#/discover/serbia:flutter) |
+| Kotlin | [`kotlin/`](https://github.com/ArAd1Beyranvand/serbia_plate/tree/main/kotlin) | [platexample](https://platexample.ir/#/discover/serbia:kotlin) |
+| Python | [`python/`](https://github.com/ArAd1Beyranvand/serbia_plate/tree/main/python) | [platexample](https://platexample.ir/#/discover/serbia:python) |
+| TypeScript | [`typescript/`](https://github.com/ArAd1Beyranvand/serbia_plate/tree/main/typescript) | [platexample](https://platexample.ir/#/discover/serbia:typescript) |
+
+## Quick start
+
+### Install
 
 ```yaml
 dependencies:
@@ -20,7 +31,7 @@ dependencies:
   serbia_plate: ^0.1.0
 ```
 
-## Use
+### Use
 
 ```dart
 import 'package:plate_core/plate_core.dart';
@@ -35,21 +46,44 @@ PlateCanvas(
 );
 ```
 
-## Contains
+## Specs
 
-- `KosovoCountry` — country panel: `kosovo`.
-- `SerbiaCountry` — country panel: `serbia`.
-- `KosovoPlates` — 12 plate specs: `private`, `government`, `police`, `emergency`, `customs`, `military`, `unmik`, `diplomatic`, `eulex`, `agriculture`, `trailer`, `moped`.
-- `SerbiaPlates` — 10 plate specs: `private`, `taxi`, `trailer`, `police`, `diplomatic`, `military`, `oldtimer`, `agricultural`, `moped`, `motorcycle`.
-- `KosovoThemes` — 11 themes: `private`, `plain`, `police`, `emergency`, `customs`, `unmikCustoms`, `military`, `agriculture`, `trailer`, `diplomatic` and 1 more.
-- `SerbiaThemes` — 10 themes: `private`, `taxi`, `trailer`, `police`, `diplomatic`, `military`, `oldtimer`, `agricultural`, `moped`, `motorcycle`.
-- `KosovoValidator` — advisory validator; flags the frame, never blocks a keystroke.
-- `SerbiaValidator` — advisory validator; flags the frame, never blocks a keystroke.
-- `KosovoSerialGenerator` — random plate generator.
-- `KosovoDistricts` — code table.
+Each spec is one plate layout.
+
+- `SerbiaPlates.private` — id `rs.private`
+- `SerbiaPlates.taxi` — id `rs.taxi`
+- `SerbiaPlates.trailer` — id `rs.trailer`
+- `SerbiaPlates.police` — id `rs.police`
+- `SerbiaPlates.diplomatic` — id `rs.diplomatic`
+- `SerbiaPlates.military` — id `rs.military`
+- `SerbiaPlates.oldtimer` — id `rs.oldtimer`
+- `SerbiaPlates.agricultural` — id `rs.agricultural`
+- `SerbiaPlates.moped` — id `rs.moped`
+- `SerbiaPlates.motorcycle` — id `rs.motorcycle`
+
+## Themes
+
+- `SerbiaThemes.private`
+- `SerbiaThemes.taxi`
+- `SerbiaThemes.trailer`
+- `SerbiaThemes.police`
+- `SerbiaThemes.diplomatic`
+- `SerbiaThemes.military`
+- `SerbiaThemes.oldtimer`
+- `SerbiaThemes.agricultural`
+- `SerbiaThemes.moped`
+- `SerbiaThemes.motorcycle`
+
+## Change it
+
+`PlateCanvas` takes `spec:` (an entry of `SerbiaPlates`) and `theme:` (an entry of `SerbiaThemes`). Set `validator:` to `SerbiaValidator()` and `autoValidate: true` to show validation hints.
+
+## Also included
+
+- `SerbiaCountry` — the country panel.
+- `SerbiaValidator` — the plate validator.
 - `SerbiaMissions` — code table.
 - `SerbiaRegions` — code table.
-- 2 bundled assets (``, ``).
 
 ## Plates
 
@@ -84,3 +118,6 @@ tail stay two slots each, because their characters are drawn apart.
 
 Painted by [`plate_core`](https://pub.dev/packages/plate_core); alphabets shared through [`plate_alphabet`](https://pub.dev/packages/plate_alphabet); optional character picker in [`plate_keypad`](https://pub.dev/packages/plate_keypad).
 
+## License
+
+See [LICENSE](https://github.com/ArAd1Beyranvand/serbia_plate/blob/main/LICENSE).

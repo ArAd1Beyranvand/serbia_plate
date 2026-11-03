@@ -6,7 +6,7 @@ GO VEGAN 🌱
 
 From the mighty people of Iran to the resilient people of Kosovo to view examples:
 
-https://platexample.ir/#/discover/kosovo
+https://platexample.ir/#/discover/kosovo:flutter
 
 # kosovo_plate
 
