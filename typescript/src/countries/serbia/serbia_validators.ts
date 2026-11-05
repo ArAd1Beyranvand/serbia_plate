@@ -1,5 +1,5 @@
-import { PlateAlphabet } from '../../core/alphabet/plate_alphabet';
-import { GatedPlateValidator, type PlateEntry, type PlateValidation, invalid, isDigitsOfLength, restrictionVerdict, valid } from '../../core/validators/plate_validator';
+import { PlateAlphabet } from 'plate_core/core/alphabet/plate_alphabet';
+import { GatedPlateValidator, type PlateEntry, type PlateValidation, invalid, isDigitsOfLength, restrictionVerdict, valid } from 'plate_core/core/validators/plate_validator';
 
 const regionLetters = PlateAlphabet.pattern({ id: 'rs.region.letters', include: 'A-C Ć Č D-S Š T-V Z Ž', exclude: 'F H Q', input: 'typed', isNumeric: false });
 const letters = PlateAlphabet.pattern({ id: 'rs.letters', include: 'A-Z', exclude: 'Q W Y', input: 'typed', isNumeric: false });
